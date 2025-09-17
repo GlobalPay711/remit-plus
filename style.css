@@ -1,0 +1,147 @@
+:root {
+    --ink: #0f172a;
+    --muted: #64748b;
+    --bg: #f8fafc;
+    --card: #fff;
+    --line: #e2e8f0;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  
+  /* Header */
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .brand {
+    font-weight: 800;
+  }
+  
+  small {
+    color: var(--muted);
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: var(--ink);
+    margin-left: 10px;
+    font-weight: 500;
+  }
+  nav a:hover {
+    color: #2563eb;
+  }
+  
+  /* Layout */
+  main {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  
+  /* Grid form */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .full {
+    grid-column: 1 / -1;
+  }
+  
+  label {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+  
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fbfdff;
+    font-size: 16px;
+  }
+  
+  /* Buttons */
+  .btn {
+    border: none;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  
+  .primary {
+    background: #0f172a;
+    color: #fff;
+  }
+  .primary:hover {
+    background: #2563eb;
+  }
+  
+  /* Notes, alerts */
+  .note {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 10px 0;
+  }
+  
+  .alert {
+    display: none;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .ok {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+  
+  .err {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+  
+  /* Footer */
+  .footer {
+    color: var(--muted);
+    text-align: center;
+    font-size: 12px;
+    margin: 24px 0;
+  }
+  
