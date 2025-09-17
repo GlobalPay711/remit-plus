@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Mai Remit — Micro Transfers</title>
+<style>
+:root{--ink:#0f172a;--muted:#64748b;--bg:#f8fafc;--card:#fff;--line:#e2e8f0}
+*{box-sizing:border-box}body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+header{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:800}small{color:var(--muted)}
+main{max-width:960px;margin:20px auto;padding:0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;margin-bottom:6px;display:block}
+input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfdff;font-size:16px}
+.btn{border:none;border-radius:12px;padding:14px 18px;font-weight:800;cursor:pointer}
+.primary{background:#0f172a;color:#fff}
+.note{color:var(--muted);font-size:12px}hr{border:none;border-top:1px solid var(--line);margin:10px 0}
+.alert{display:none;padding:10px;border-radius:10px;margin-bottom:12px}
+.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}.err{background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+.footer{color:var(--muted);text-align:center;font-size:12px;margin:24px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Mai Remit <small>USA ⇄ Nepal • $5+</small></div>
+  <nav><a href="/terms.html">Terms</a> &nbsp;•&nbsp; <a href="/privacy.html">Privacy</a></nav>
+</header>
+
+<main>
+  <section class="card">
+    <div id="ok" class="alert ok"></div>
+    <div id="err" class="alert err"></div>
+    <h2 style="margin:0">Send Money</h2>
+    <p class="note">Pay with card/Apple Pay via Stripe. Receiver gets payout via Bank / eSewa / Khalti / IME (manual first; automate later).</p>
+    <div class="grid">
+      <div>
+        <label>Amount (USD) — minimum $5</label>
+        <input type="number" id="amount" min="5" step="1" placeholder="5" required/>
+      </div>
+      <div>
+        <label>Your Email (for receipt)</label>
+        <input type="email" id="sender_email" placeholder="you@example.com" required/>
+      </div>
+      <div class="full"><hr/></div>
+      <div>
+        <label>Receiver Full Name</label>
+        <input type="text" id="receiver_name" placeholder="Ram Bahadur" required/>
+      </div>
+      <div>
+        <label>Payout Method</label>
+        <select id="payout_method" required>
+          <option value="bank">Bank Transfer (Nepal)</option>
+          <option value="esewa">eSewa</option>
+          <option value="khalti">Khalti</option>
+          <option value="ime">IME</option>
+          <option value="cash">Cash Pickup</option>
+        </select>
+      </div>
+      <div class="full">
+        <label>Receiver Account / Wallet / Bank Details</label>
+        <input type="text" id="receiver_account" placeholder="Bank: Nabil / A/C: 001234... (or eSewa/Khalti/IME ID)" required/>
+      </div>
+      <div class="full">
+        <label>Notes (optional)</label>
+        <textarea id="notes" placeholder="Message or instructions"></textarea>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:12px;align-items:center">
+      <button class="btn primary" id="payBtn">Pay & Start Transfer</button>
+      <span class="note">Redirects to Stripe Checkout.</span>
+    </div>
+  </section>
+
+  <div class="footer">© <span id="year"></span> Mai Remit</div>
+</main>
+
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+const ok=document.getElementById('ok'), err=document.getElementById('err');
+function show(el,msg){el.textContent=msg;el.style.display='block'}; function hide(){ok.style.display='none';err.style.display='none'};
+async function call(path,body){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});if(!r.ok)throw new Error(await r.text());return r.json();}
+
+document.getElementById('payBtn').onclick=async()=>{
+  hide();
+  const payload={
+    amount_usd:Number(document.getElementById('amount').value),
+    sender_email:document.getElementById('sender_email').value,
+    receiver_name:document.getElementById('receiver_name').value,
+    payout_method:document.getElementById('payout_method').value,
+    receiver_account:document.getElementById('receiver_account').value,
+    notes:document.getElementById('notes').value
+  };
+  try{
+    const {url}=await call('/api/create-checkout-session',payload);
+    window.location.href=url;
+  }catch(e){show(err,e.message)}
+};
+</script>
+</body>
+</html>
